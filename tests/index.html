@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tests de l'app</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 760px; margin: 1.5rem auto; padding: 0 1rem; }
+  .pass { color: #1e7d3a; } .fail { color: #c62828; font-weight: 600; }
+  li { margin: .2rem 0; } pre { white-space: pre-wrap; background: #f6f6f8; padding: .5rem; border-radius: 6px; }
+  #summary { font-size: 1.3rem; font-weight: 700; }
+</style>
+</head>
+<body>
+<h1>Tests automatiques</h1>
+<p>Cette page vérifie l'algorithme SM-2, le CSV, les statistiques, la base de données (création, révision, import, sauvegarde) et le client IA (avec de fausses réponses). Elle utilise une base de test séparée : tes cartes ne sont pas touchées.</p>
+<p id="summary">Tests en cours…</p>
+<ul id="results"></ul>
+<script>window.__TEST_DB_NAME__ = 'flashcards-test-db';</script>
+<script type="module" src="tests.js"></script>
+</body>
+</html>

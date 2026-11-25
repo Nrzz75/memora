@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fabrique d'icônes</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+  .row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; }
+  figure { margin: 0; text-align: center; font-size: .8rem; }
+  canvas { border: 1px solid #ddd; border-radius: 8px; width: 96px; height: 96px; }
+  a { display: block; margin-top: .3rem; }
+  input { font-size: 1.2rem; width: 4rem; text-align: center; }
+</style>
+</head>
+<body>
+<!-- Outil : fabrique les icônes PNG de l'app (iPhone et Android ont
+     besoin d'images PNG) à partir d'une lettre. Ouvre cette page dans un
+     navigateur, choisis la lettre, puis télécharge les 4 fichiers dans
+     le dossier « icons ». -->
+<h1>Icônes de l'app</h1>
+<p>Lettre affichée sur l'icône : <input id="letter" maxlength="2" value="M"></p>
+<div class="row" id="out"></div>
+<script>
+const SIZES = [
+  { name: 'icon-192.png', size: 192, maskable: false },
+  { name: 'icon-512.png', size: 512, maskable: false },
+  { name: 'icon-maskable-512.png', size: 512, maskable: true },
+  { name: 'apple-touch-icon.png', size: 180, maskable: false, square: true },
+];
+
+// Même dessin que icons/icon.svg
+function draw(ctx, s, letter, { maskable, square }) {
+  const k = s / 512;
+  ctx.save();
+  ctx.scale(k, k);
+  const g = ctx.createLinearGradient(0, 0, 512, 512);
+  g.addColorStop(0, '#6366f1'); g.addColorStop(1, '#4338ca');
+  ctx.fillStyle = g;
+  if (maskable || square) ctx.fillRect(0, 0, 512, 512);           // fond plein (le téléphone découpe)
+  else { roundRect(ctx, 0, 0, 512, 512, 112); ctx.fill(); }
+  if (maskable) { ctx.translate(256, 256); ctx.scale(0.78, 0.78); ctx.translate(-256, -256); } // zone de sécurité
+  ctx.save();
+  ctx.translate(266, 262); ctx.rotate(10 * Math.PI / 180); ctx.translate(-266, -262);
+  ctx.globalAlpha = 0.35; ctx.fillStyle = '#fff'; roundRect(ctx, 150, 112, 232, 300, 28); ctx.fill();
+  ctx.restore();
+  ctx.fillStyle = '#fff'; roundRect(ctx, 130, 110, 232, 300, 28); ctx.fill();
+  ctx.fillStyle = '#4338ca';
+  ctx.font = `700 ${letter.length > 1 ? 130 : 170}px Helvetica, Arial, sans-serif`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(letter, 246, 318);
+  ctx.fillStyle = '#fde68a';
+  ctx.beginPath();
+  ctx.moveTo(384, 92); ctx.lineTo(398, 126); ctx.lineTo(432, 140); ctx.lineTo(398, 154);
+  ctx.lineTo(384, 188); ctx.lineTo(370, 154); ctx.lineTo(336, 140); ctx.lineTo(370, 126);
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+function render() {
+  const letter = document.getElementById('letter').value.trim() || 'M';
+  const out = document.getElementById('out');
+  out.innerHTML = '';
+  for (const o of SIZES) {
+    const c = document.createElement('canvas');
+    c.width = c.height = o.size;
+    draw(c.getContext('2d'), o.size, letter, o);
+    const fig = document.createElement('figure');
+    const a = document.createElement('a');
+    a.href = c.toDataURL('image/png');
+    a.download = o.name;
+    a.textContent = o.name;
+    a.dataset.name = o.name;
+    fig.append(c, a);
+    out.append(fig);
+  }
+}
+document.getElementById('letter').oninput = render;
+render();
+</script>
+</body>
+</html>

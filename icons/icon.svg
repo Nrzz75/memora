@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Icône de l'app : deux cartes superposées + une étincelle (IA) -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#4338ca"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="150" y="112" width="232" height="300" rx="28" fill="#ffffff" opacity="0.35" transform="rotate(10 266 262)"/>
+  <rect x="130" y="110" width="232" height="300" rx="28" fill="#ffffff"/>
+  <text id="letter" x="246" y="318" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="170" fill="#4338ca">M</text>
+  <path d="M384 92l14 34 34 14-34 14-14 34-14-34-34-14 34-14z" fill="#fde68a"/>
+</svg>
